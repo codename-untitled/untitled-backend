@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200&display=swap');
+    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+  <title>Welcome to Onboarder</title>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200&display=swap" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200&display=swap');
+    body {
+      -webkit-font-smoothing:antialiased;
+      -webkit-text-size-adjust:none;
+      font-family: 'Manrope', sans-serif !important;
+      margin: 0;
+      padding: 0;
+      color: #151515;
+      display: flex;
+      flex-direction: column;
+    }
+    .body {
+      font-family: 'Manrope', sans-serif;
+      color: #151515;
+      display: flex;
+      flex-direction: column;
+      background: var(--Background-color, #FFFBF5);
+    }
+
+    h1, p{
+      font-family: 'Manrope', sans-serif;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      border-radius: 5px;
+      border: 0.5px solid var(--Black, #151515);
+      background: var(--white-active, #FFF);
+      overflow: hidden;
+      padding: 20px;
+    }
+
+    .welcome-heading {
+      font-family: 'Manrope', sans-serif;
+      text-align: center;
+      font-size: 30px;
+      font-weight: 700;
+      margin-top: 20px;
+    }
+
+    .image {
+        text-align: center;
+    }
+
+    .button {
+        text-align: center;
+    }
+    .content-text {
+      font-family: 'Manrope', sans-serif;
+      color: #000;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.5;
+      margin-top: 20px;
+    }
+
+    .login-details {
+      margin-top: 20px;
+    }
+
+    .login-details p {
+      margin-bottom: 10px;
+    }
+
+    .sign-in-button {
+      display: inline-flex;
+      padding: 18px 30px;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      border-radius: 5px;
+      border: 0.5px solid var(--Black, #151515);
+      background: var(--Chart-purple, #9923AC);
+      box-shadow: 1px 1px 0px 0px #000;
+      color: #fff !important;
+      text-decoration: none !important;
+      font-weight: 700;
+    }
+
+    a, span {
+        text-decoration: none !important;
+        color: #fff;
+    }
+
+    .contact-info {
+      font-family: 'Manrope', sans-serif;
+      margin-top: 20px;
+      color: #000;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.5;
+    }
+
+    .support-email {
+      font-family: 'Manrope', sans-serif;
+      color: #9923AC !important;
+      text-decoration: underline !important;
+    }
+    .footer {
+      font-family: 'Manrope', sans-serif;
+      text-align: center;
+      margin-top: 20px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+<div class="body">
+  <div class="container">
+    <h1 class="welcome-heading" style="font-family: 'Manrope', sans-serif">Welcome to Onboarder</h1>
+    <div class="image">
+        <img src="https://i.postimg.cc/HL1KrkjH/email.jpg" alt="Onboarder Image">
+    </div>
+    <p class="content-text" style="font-family: 'Manrope', sans-serif">
+      We are so glad that you have joined us and we hope that you will enjoy using our features and services.
+      To help you get started, we have created an account for you with the following login details:
+    </p>
+
+    <div class="login-details" style="font-family: 'Manrope', sans-serif">
+        <p>Email: <span>{{email}}</span></p>
+        <p>Password: <span>{{password}}</span></p>
+      <p>You can use these login details to access your account from any browser.</p>
+    </div>
+
+    <div class="button" style="font-family: 'Manrope', sans-serif">
+        <a href="https://onboarder-untitled.netlify.app/employee/signin" class="sign-in-button">Sign In</a>
+    </div>
+
+    <p class="content-text" style="font-family: 'Manrope', sans-serif">
+      If you have any questions or feedback, please feel free to contact us at
+      <span class="support-email">support@onboarder.com</span>.
+      We are always happy to hear from you and assist you in any way we can.
+    </p>
+
+    <p class="content-text" style="font-family: 'Manrope', sans-serif">
+      Thank you for choosing our app, and we look forward to seeing you soon. 😊
+    </p>
+    <div class="footer" style="font-family: 'Manrope', sans-serif">
+        &copy; 2023 Onboarder. All rights reserved.
+    </div>
+  </div>
+</div>
+</body>
+</html>

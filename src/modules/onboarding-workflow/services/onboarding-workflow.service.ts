@@ -4,7 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { OnboardingWorkflow } from '../model/onboarding-workflow.model';
+//import { OnboardingWorkflow } from '../model/onboarding-workflow.model';
 import { OnboardingWorkflowRepo } from '../repository/onboarding-workflow.repository';
 import { OnboardingWorkflowDomain } from '../domain/onboarding-workflow';
 import { OnboardingWorkflowMap } from '../mappers/OnboardingWorkflowMap';
@@ -15,7 +15,7 @@ import { OnboardingStepsService } from 'src/modules/onborading-steps/services/on
 import { AssignedWorkflowRepo } from '../repository/assigned-workflow.repository';
 import { EmployeeService } from 'src/modules/users/services/employee.service';
 import { FirebaseStorage } from 'src/libs/infra/firebase-storage/firebase-storage';
-import { AddStepToAssignedWorkFlowDto } from '../dtos/AddStepToAssignedWorkflowDto';
+import sendEmail from 'src/libs/utils/mailer';
 
 @Injectable()
 export class OnboardingWorkflowService {
@@ -33,9 +33,12 @@ export class OnboardingWorkflowService {
     private readonly onboardingWorkflowRepo: OnboardingWorkflowRepo,
   ) {}
 
-  async createWorkflow(dto: AddWorkFlowDto) {
+  async createWorkflow(companyId: string, dto: AddWorkFlowDto) {
     try {
-      const newWorkfloworError = OnboardingWorkflowDomain.create(dto);
+      const newWorkfloworError = OnboardingWorkflowDomain.create({
+        companyId,
+        ...dto,
+      });
 
       if (newWorkfloworError.isFailure) {
         throw new BadRequestException(newWorkfloworError.errorValue());
@@ -59,6 +62,17 @@ export class OnboardingWorkflowService {
         1,
         {},
       );
+      return workflows;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
+  async getWorkflowsByCompany(companyId: string) {
+    try {
+      const workflows =
+        await this.onboardingWorkflowRepo.findByCompany(companyId);
       return workflows;
     } catch (error) {
       console.log(error);
@@ -139,9 +153,23 @@ export class OnboardingWorkflowService {
         steps: steps,
       });
 
-      return this.employeeService.updateEmployee(employeeId, {
+      await this.employeeService.updateEmployee(employeeId, {
         assignedWorkflow: assignedWorkflowId._id.toString(),
       });
+
+      // Send welcome email
+      const user = await this.employeeService.getEmployeeById(employeeId);
+      await sendEmail({
+        to: user.email,
+        from: 'onboarderuntitled@gmail.com',
+        subject: 'WELCOME ONBOARD',
+        template: 'email',
+        firstName: user.firstName,
+        email: user.email,
+        password: user.password,
+      });
+
+      return assignedWorkflowId;
     } catch (error) {
       console.log(error);
       throw error;
