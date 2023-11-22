@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Delete,
     Get,
     Param,
     Post,
@@ -31,6 +32,12 @@ import { CreateSignDocumentStepDto } from "./dtos/CreateSignedDocumentStepDto";
       return res;
     }
 
+    @Delete('/:id')
+    async deleteStep(@Param('id') id: string){
+      const res = await this.onboardingStepService.deleteStep(id)
+      return res
+    }
+
     @Post("/sign")
     @UseInterceptors(FilesInterceptor('docs'))
     async createSignDocumentStep(
@@ -38,6 +45,12 @@ import { CreateSignDocumentStepDto } from "./dtos/CreateSignedDocumentStepDto";
         @Body() dto: CreateSignDocumentStepDto
         ) {
       const res = await this.onboardingStepService.createSignDocumentStep(docs, dto);
+      return res;
+    }
+
+    @Put("/assign/:id")
+    async updateAssignedStep(@Body() dto: CreateStepDto, @Param('id') id: string) {
+      const res = await this.onboardingStepService.updateAssignedStep(id, dto);
       return res;
     }
 

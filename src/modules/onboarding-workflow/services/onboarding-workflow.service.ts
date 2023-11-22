@@ -116,6 +116,26 @@ export class OnboardingWorkflowService {
     }
   }
 
+  async addStepToAssignedWorkflow(workflowId: string, dto: AddStepToAssignedWorkFlowDto){
+    try {
+      const order = await this.assignedWorkflowRepo.findOne({
+        _id: workflowId,
+        'steps.order': dto.order,
+      });
+      if (order) {
+        throw new BadRequestException('Order already exists, change order');
+      }
+      const stepId = (await this.onboardingStepsService.createAssignedStepFromOnboardingStep(dto.stepId, dto.order))[0]
+      return this.assignedWorkflowRepo.addStepToWorkflow(workflowId, {
+        order: stepId.order,
+        stepId: stepId.step
+      });
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }  
+ 
   async assignWorkflowToEmployee(workflowId: string, employeeId: string) {
     try {
       const workflow = await this.onboardingWorkflowRepo.findById(workflowId, {
@@ -156,6 +176,7 @@ export class OnboardingWorkflowService {
     }
   }
 
+
   async getAssignedWorkflowById(id: string) {
     try {
       const assignedWorkflow = await this.assignedWorkflowRepo.findById(id, {
@@ -173,6 +194,11 @@ export class OnboardingWorkflowService {
     } catch (error) {
       throw error;
     }
+  }
+
+
+  async deleteWorkflow(id: string){
+    return this.onboardingWorkflowRepo.findOneAndDelete({_id: id})
   }
 
   async submitStep(
