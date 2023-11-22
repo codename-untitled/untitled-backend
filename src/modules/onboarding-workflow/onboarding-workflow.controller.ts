@@ -1,26 +1,45 @@
-import { Body, Controller, Get, Param, Post, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  UploadedFiles,
+  UseGuards,
+  UseInterceptors,
+  Req,
+} from '@nestjs/common';
 import { AddWorkFlowDto } from './dtos/AddWorkFlowDto';
 import { OnboardingWorkflowService } from './services/onboarding-workflow.service';
 import { AddStepWorkFlowDto } from './dtos/AddStepToWorkFlowDto';
 import { AssignWorkflowToEmployeeDto } from './dtos/AssignWorkflowToUser';
-import { EmployeeAuthMiddleware } from '../users/middleware/employee-auth.middleware';
+// import { EmployeeAuthMiddleware } from '../users/middleware/employee-auth.middleware';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { CreateSignDocumentStepDto } from '../onborading-steps/dtos/CreateSignedDocumentStepDto';
+// import { CreateSignDocumentStepDto } from '../onborading-steps/dtos/CreateSignedDocumentStepDto';
+import { CompanyAuthMiddleware } from '../users/middleware/company-auth.middleware';
 @Controller('onboarding-workflow')
 export class OnboardingWorkflowController {
   constructor(
     private readonly onboardingWorkflowService: OnboardingWorkflowService,
   ) {}
 
+  @UseGuards(CompanyAuthMiddleware)
   @Post('/')
-  async createContractDocument(@Body() dto: AddWorkFlowDto) {
-    const res = await this.onboardingWorkflowService.createWorkflow(dto);
+  async createContractDocument(@Body() dto: AddWorkFlowDto, @Req() request) {
+    const companyId = request.companyId;
+    const res = await this.onboardingWorkflowService.createWorkflow(
+      companyId,
+      dto,
+    );
     return res;
   }
 
+  @UseGuards(CompanyAuthMiddleware)
   @Get('/')
-  async getAllWorflows() {
-    const res = await this.onboardingWorkflowService.getAllWorkflows();
+  async getAllWorflowsinACompany(@Req() request) {
+    const companyId = request.companyId;
+    const res =
+      await this.onboardingWorkflowService.getWorkflowsByCompany(companyId);
     return res;
   }
 
@@ -30,7 +49,7 @@ export class OnboardingWorkflowController {
     return res;
   }
 
-  @UseGuards(EmployeeAuthMiddleware)
+  @UseGuards(CompanyAuthMiddleware)
   @Post('assign')
   async assignWorkflowToEmployee(@Body() dto: AssignWorkflowToEmployeeDto) {
     const res = await this.onboardingWorkflowService.assignWorkflowToEmployee(
@@ -53,7 +72,7 @@ export class OnboardingWorkflowController {
     @UploadedFiles() docs: Express.Multer.File[],
     @Param('workflowId') workflowId: string,
     @Param('stepId') stepId: string,
-    @Body() dto: any
+    @Body() dto: any,
   ) {
     const res = await this.onboardingWorkflowService.submitStep(
       workflowId,

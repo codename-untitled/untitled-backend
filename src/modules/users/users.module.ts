@@ -5,8 +5,8 @@ import { EmployeeController } from './controller/employee.controller';
 import { CompanyRepo } from './repository/company.repository';
 import { CompanyService } from './services/company.service';
 import { CompanyController } from './controller/company.controller';
-import { EmployeeUploadController } from './controller/employee-upload.controller';
-import { EmployeeUploadService } from './services/employee-upload.service';
+// import { EmployeeUploadController } from './controller/employee-upload.controller';
+// import { EmployeeUploadService } from './services/employee-upload.service';
 import { OnboardingWorkflowModule } from '../onboarding-workflow/onboarding-workflow.module';
 
 @Module({
@@ -14,12 +14,12 @@ import { OnboardingWorkflowModule } from '../onboarding-workflow/onboarding-work
   controllers: [
     CompanyController,
     EmployeeController,
-    EmployeeUploadController,
+    // EmployeeUploadController,
   ],
   providers: [
     CompanyService,
     EmployeeService,
-    EmployeeUploadService,
+    // EmployeeUploadService,
     {
       provide: 'EmployeeRepo',
       useClass: EmployeeRepo,
@@ -29,6 +29,6 @@ import { OnboardingWorkflowModule } from '../onboarding-workflow/onboarding-work
       useClass: CompanyRepo,
     },
   ],
-  exports: [CompanyService, EmployeeService, EmployeeUploadService],
+  exports: [CompanyService, EmployeeService /*, EmployeeUploadService*/],
 })
 export class UsersModule {}
